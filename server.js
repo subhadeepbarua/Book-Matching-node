@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 const mongoURI = 'mongodb+srv://avijitsarkarofficial39:YFR6mdJdUb8PoI94@bookdata.osrvcno.mongodb.net/?retryWrites=true&w=majority';
 const modelId = 'sentence-transformers/all-MiniLM-L6-v2';
-const hfToken = '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';
+const hfToken = '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';
 const apiUrl = `https://api-inference.huggingface.co/pipeline/feature-extraction/${modelId}`;
 const headers = { Authorization: `Bearer ${hfToken}` };
 
@@ -36,23 +36,23 @@ async function findSimilarDocuments(preferredPlot, favoriteBooks) {
             knnBeta: {
               vector: queryEmbedding,
               path: 'embeddings',
-              k: 10,
+              k: 6,
             },
           },
         },
         {
           $project: {
             original_title: 1,
-            authors: 1, // Include author field
-            summary: 1, // Include summary field
+            authors: 1,
+            summary: 1, 
+            coverImgURL: 1,
             score: { $meta: 'searchScore' },
           },
         },
       ])
       .toArray();
-
     client.close();
-
+    
     return documents;
   } catch (error) {
     console.error('Error:', error.message);
